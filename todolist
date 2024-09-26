@@ -1,0 +1,110 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Structure to represent a task
+struct Task {
+    string description;
+    bool isCompleted;
+
+    // Constructor to initialize a new task as pending (not completed)
+    Task(string desc) {
+        description = desc;
+        isCompleted = false;
+    }
+};
+
+// Function to add a new task to the list
+void addTask(vector<Task>& taskList) {
+    string taskDescription;
+    cout << "Enter the task description: ";
+    cin.ignore();  // To handle newline character left in the input buffer
+    getline(cin, taskDescription);
+    taskList.push_back(Task(taskDescription));
+    cout << "Task added successfully!" << endl;
+}
+
+// Function to display tasks with their completion status
+void viewTasks(const vector<Task>& taskList) {
+    if (taskList.empty()) {
+        cout << "No tasks in the list." << endl;
+        return;
+    }
+
+    cout << "Tasks List:" << endl;
+    for (size_t i = 0; i < taskList.size(); ++i) {
+        cout << i + 1 << ". " << taskList[i].description 
+             << " [ " << (taskList[i].isCompleted ? "Completed" : "Pending") << " ]" << endl;
+    }
+}
+
+// Function to mark a task as completed
+void markTaskAsCompleted(vector<Task>& taskList) {
+    int taskNumber;
+    viewTasks(taskList);  // Show tasks to the user first
+    cout << "Enter the task number to mark as completed: ";
+    cin >> taskNumber;
+
+    if (taskNumber > 0 && taskNumber <= taskList.size()) {
+        taskList[taskNumber - 1].isCompleted = true;
+        cout << "Task marked as completed!" << endl;
+    } else {
+        cout << "Invalid task number!" << endl;
+    }
+}
+
+// Function to remove a task from the list
+void removeTask(vector<Task>& taskList) {
+    int taskNumber;
+    viewTasks(taskList);  // Show tasks to the user first
+    cout << "Enter the task number to remove: ";
+    cin >> taskNumber;
+
+    if (taskNumber > 0 && taskNumber <= taskList.size()) {
+        taskList.erase(taskList.begin() + (taskNumber - 1));
+        cout << "Task removed successfully!" << endl;
+    } else {
+        cout << "Invalid task number!" << endl;
+    }
+}
+
+// Main program menu
+int main() {
+    vector<Task> taskList;
+    int choice;
+
+    do {
+        cout << "\nTask Management System" << endl;
+        cout << "1. Add Task" << endl;
+        cout << "2. View Tasks" << endl;
+        cout << "3. Mark Task as Completed" << endl;
+        cout << "4. Remove Task" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addTask(taskList);
+                break;
+            case 2:
+                viewTasks(taskList);
+                break;
+            case 3:
+                markTaskAsCompleted(taskList);
+                break;
+            case 4:
+                removeTask(taskList);
+                break;
+            case 5:
+                cout << "Exiting the program." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
